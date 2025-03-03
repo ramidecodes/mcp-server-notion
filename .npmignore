@@ -1,0 +1,47 @@
+# Source files
+src/
+
+# Development files
+node_modules/
+.git/
+.github/
+.vscode/
+.idea/
+.DS_Store
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Config files
+.eslintrc.json
+tsconfig.json
+.prettierrc
+.editorconfig
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Test files
+test/
+__tests__/
+coverage/
+.nyc_output/
+
+# Build artifacts
+*.tsbuildinfo
+
+# Temporary files
+tmp/
+temp/
+
+# Lock files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml 

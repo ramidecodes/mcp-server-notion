@@ -81,3 +81,67 @@ export const BlockChildrenQuerySchema = z.object({
 });
 
 export type BlockChildrenQuery = z.infer<typeof BlockChildrenQuerySchema>;
+
+// Comment query parameters
+export const CommentQuerySchema = z.object({
+  block_id: z.string().optional(),
+  page_id: z.string().optional(),
+  start_cursor: z.string().optional(),
+  page_size: z.number().min(1).max(100).optional(),
+});
+
+export type CommentQuery = z.infer<typeof CommentQuerySchema>;
+
+// Create comment parameters
+export const CreateCommentSchema = z.object({
+  parent: z.object({
+    page_id: z.string(),
+  }),
+  rich_text: z.array(
+    z.object({
+      type: z.literal("text"),
+      text: z.object({
+        content: z.string(),
+        link: z
+          .object({
+            url: z.string(),
+          })
+          .optional(),
+      }),
+      annotations: z
+        .object({
+          bold: z.boolean().optional(),
+          italic: z.boolean().optional(),
+          strikethrough: z.boolean().optional(),
+          underline: z.boolean().optional(),
+          code: z.boolean().optional(),
+          color: z
+            .enum([
+              "default",
+              "gray",
+              "brown",
+              "orange",
+              "yellow",
+              "green",
+              "blue",
+              "purple",
+              "pink",
+              "red",
+            ])
+            .optional(),
+        })
+        .optional(),
+    })
+  ),
+  discussion_id: z.string().optional(),
+});
+
+export type CreateComment = z.infer<typeof CreateCommentSchema>;
+
+// Link Preview parameters
+export const LinkPreviewSchema = z.object({
+  url: z.string().url(),
+  page_id: z.string().optional(),
+});
+
+export type LinkPreview = z.infer<typeof LinkPreviewSchema>;

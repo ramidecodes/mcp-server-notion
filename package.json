@@ -1,29 +1,53 @@
 {
   "name": "mcp-server-notion",
   "version": "1.0.0",
-  "description": "Model Context Protocol server for Notion SDK integration",
+  "description": "A Model Context Protocol (MCP) server that exposes the official Notion SDK",
   "type": "module",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "bin": {
     "mcp-server-notion": "dist/bin.js"
   },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "docs",
+    ".cursor/rules"
+  ],
   "scripts": {
     "build": "tsc",
     "start": "node dist/bin.js",
     "dev": "ts-node-dev --respawn --transpile-only src/bin.ts",
     "lint": "eslint --ext .ts src/",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prepare": "npm run build"
+    "prepare": "npm run build",
+    "prepublishOnly": "npm run lint && npm run build"
   },
   "keywords": [
     "mcp",
     "notion",
     "model-context-protocol",
-    "ai",
-    "llm"
+    "llm",
+    "mcp-server",
+    "cursor",
+    "modelcontextprotocol",
+    "notion-api",
+    "notion-sdk-js"
   ],
-  "author": "",
+  "author": "Ramiro Ramirez <ramidecodes@gmail.com>",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ramidecodes/mcp-server-notion.git"
+  },
+  "homepage": "https://github.com/ramidecodes/mcp-server-notion#readme",
+  "bugs": {
+    "url": "https://github.com/ramidecodes/mcp-server-notion/issues"
+  },
+  "engines": {
+    "node": ">=18"
+  },
   "dependencies": {
     "@modelcontextprotocol/sdk": "1.6.1",
     "@notionhq/client": "2.2.16",

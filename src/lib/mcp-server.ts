@@ -39,6 +39,15 @@ export class NotionMCPServer {
 
     // Block operations
     this.registerBlockTools();
+
+    // User operations
+    this.registerUserTools();
+
+    // Comment operations
+    this.registerCommentTools();
+
+    // Link Preview operations
+    this.registerLinkPreviewTools();
   }
 
   /**
@@ -519,6 +528,272 @@ export class NotionMCPServer {
               {
                 type: "text",
                 text: `Error: Failed to delete block - ${
+                  (error as Error).message
+                }`,
+              },
+            ],
+            isError: true,
+          };
+        }
+      }
+    );
+  }
+
+  /**
+   * Register user-related tools
+   */
+  private registerUserTools(): void {
+    // List users
+    this.server.tool("list-users", {}, async () => {
+      try {
+        const results = await this.notionService.listUsers();
+        return {
+          content: [
+            {
+              type: "text",
+              text: JSON.stringify(results, null, 2),
+            },
+          ],
+        };
+      } catch (error) {
+        console.error("Error in list-users tool:", error);
+        return {
+          content: [
+            {
+              type: "text",
+              text: `Error: Failed to list Notion users - ${
+                (error as Error).message
+              }`,
+            },
+          ],
+          isError: true,
+        };
+      }
+    });
+
+    // Get user
+    this.server.tool(
+      "get-user",
+      {
+        user_id: z.string().describe("The ID of the user to retrieve"),
+      },
+      async ({ user_id }) => {
+        try {
+          const result = await this.notionService.retrieveUser(user_id);
+          return {
+            content: [
+              {
+                type: "text",
+                text: JSON.stringify(result, null, 2),
+              },
+            ],
+          };
+        } catch (error) {
+          console.error("Error in get-user tool:", error);
+          return {
+            content: [
+              {
+                type: "text",
+                text: `Error: Failed to retrieve Notion user - ${
+                  (error as Error).message
+                }`,
+              },
+            ],
+            isError: true,
+          };
+        }
+      }
+    );
+
+    // Get bot user (me)
+    this.server.tool("get-me", {}, async () => {
+      try {
+        const result = await this.notionService.retrieveMe();
+        return {
+          content: [
+            {
+              type: "text",
+              text: JSON.stringify(result, null, 2),
+            },
+          ],
+        };
+      } catch (error) {
+        console.error("Error in get-me tool:", error);
+        return {
+          content: [
+            {
+              type: "text",
+              text: `Error: Failed to retrieve bot user - ${
+                (error as Error).message
+              }`,
+            },
+          ],
+          isError: true,
+        };
+      }
+    });
+  }
+
+  /**
+   * Register comment-related tools
+   */
+  private registerCommentTools(): void {
+    // Create comment
+    this.server.tool(
+      "create-comment",
+      {
+        page_id: z.string().describe("The ID of the page to comment on"),
+        text: z.string().describe("The comment text content"),
+        discussion_id: z
+          .string()
+          .optional()
+          .describe("Optional discussion ID for threaded comments"),
+      },
+      async ({ page_id, text, discussion_id }) => {
+        try {
+          const result = await this.notionService.createComment({
+            parent: {
+              page_id: page_id,
+            },
+            rich_text: [
+              {
+                type: "text",
+                text: {
+                  content: text,
+                },
+              },
+            ],
+            discussion_id,
+          });
+
+          return {
+            content: [
+              {
+                type: "text",
+                text: JSON.stringify(result, null, 2),
+              },
+            ],
+          };
+        } catch (error) {
+          console.error("Error in create-comment tool:", error);
+          return {
+            content: [
+              {
+                type: "text",
+                text: `Error: Failed to create comment - ${
+                  (error as Error).message
+                }`,
+              },
+            ],
+            isError: true,
+          };
+        }
+      }
+    );
+
+    // List comments
+    this.server.tool(
+      "list-comments",
+      {
+        page_id: z
+          .string()
+          .optional()
+          .describe("The ID of the page to get comments from"),
+        block_id: z
+          .string()
+          .optional()
+          .describe("The ID of the block to get comments from"),
+        start_cursor: z.string().optional().describe("Pagination cursor"),
+        page_size: z
+          .number()
+          .min(1)
+          .max(100)
+          .optional()
+          .describe("Number of results to return (max 100)"),
+      },
+      async ({ page_id, block_id, start_cursor, page_size }) => {
+        try {
+          if (!page_id && !block_id) {
+            return {
+              content: [
+                {
+                  type: "text",
+                  text: "Error: Either page_id or block_id must be provided",
+                },
+              ],
+              isError: true,
+            };
+          }
+
+          const result = await this.notionService.listComments({
+            page_id,
+            block_id,
+            start_cursor,
+            page_size,
+          });
+
+          return {
+            content: [
+              {
+                type: "text",
+                text: JSON.stringify(result, null, 2),
+              },
+            ],
+          };
+        } catch (error) {
+          console.error("Error in list-comments tool:", error);
+          return {
+            content: [
+              {
+                type: "text",
+                text: `Error: Failed to list comments - ${
+                  (error as Error).message
+                }`,
+              },
+            ],
+            isError: true,
+          };
+        }
+      }
+    );
+  }
+
+  /**
+   * Register Link Preview tools
+   */
+  private registerLinkPreviewTools(): void {
+    // Create link preview
+    this.server.tool(
+      "create-link-preview",
+      {
+        url: z.string().url().describe("The URL to create a preview for"),
+        page_id: z
+          .string()
+          .optional()
+          .describe("The ID of the page to add the preview to"),
+      },
+      async ({ url, page_id }) => {
+        try {
+          const result = await this.notionService.createLinkPreview({
+            url,
+            page_id,
+          });
+
+          return {
+            content: [
+              {
+                type: "text",
+                text: JSON.stringify(result, null, 2),
+              },
+            ],
+          };
+        } catch (error) {
+          console.error("Error in create-link-preview tool:", error);
+          return {
+            content: [
+              {
+                type: "text",
+                text: `Error: Failed to create link preview - ${
                   (error as Error).message
                 }`,
               },
