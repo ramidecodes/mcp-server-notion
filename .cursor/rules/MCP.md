@@ -16,6 +16,7 @@ This rules file defines how Cursor AI should interact with the Model Context Pro
 
 - Always use the `@latest` tag to ensure you're using the most recent version
 - Include the `-y` flag to skip confirmation prompts
+- When using the `--api-key` parameter, use the format `--api-key=your_notion_api_key` (with equals sign, no spaces)
 - When using environment variables, set `NOTION_API_KEY` (not `--api-key`)
 - On Windows, prefix with `cmd /c` to ensure proper execution: `cmd /c npx @ecovirtual/mcp-server-notion@latest -y --api-key=your_notion_api_key`
 - On macOS/Linux, consider using the full path to npx if you encounter issues
