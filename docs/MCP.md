@@ -118,8 +118,9 @@ The MCP server includes robust error handling to ensure that errors in tool exec
 
 Cursor is an AI-powered code editor that can integrate with MCP-compatible tools. To use the Notion MCP Server with Cursor:
 
-1. Install and configure the Notion MCP Server
-2. Add the Notion tool in Cursor's settings
+1. Configure your Notion API key
+2. Add the Notion tool in Cursor's settings with the command: `npx @ecovirtual/mcp-server-notion@latest -y --api-key=your_notion_api_key`
+   (Note: `--api-key` is a command-line parameter. When using environment variables, use `NOTION_API_KEY` instead)
 3. Use natural language to ask Cursor to perform Notion operations
 
 For detailed instructions, see the [Cursor Integration Guide](CURSOR_INTEGRATION.md).

@@ -9,7 +9,17 @@ This rules file defines how Cursor AI should interact with the Model Context Pro
 - **Name**: Notion MCP Server
 - **Purpose**: Provides access to Notion workspaces via the Model Context Protocol
 - **Transport**: stdio (standard input/output)
-- **Authentication**: Requires a Notion API key stored in environment variables
+- **Authentication**: Requires a Notion API key provided via command-line parameter `--api-key` or stored in environment variable `NOTION_API_KEY`
+- **Installation**: Run directly via `npx @ecovirtual/mcp-server-notion@latest -y --api-key=your_notion_api_key`
+
+## Command Format Best Practices
+
+- Always use the `@latest` tag to ensure you're using the most recent version
+- Include the `-y` flag to skip confirmation prompts
+- When using environment variables, set `NOTION_API_KEY` (not `--api-key`)
+- On Windows, prefix with `cmd /c` to ensure proper execution: `cmd /c npx @ecovirtual/mcp-server-notion@latest -y --api-key=your_notion_api_key`
+- On macOS/Linux, consider using the full path to npx if you encounter issues
+- For troubleshooting "Failed to create client" errors, try creating a shell script wrapper
 
 ## Available Tools
 

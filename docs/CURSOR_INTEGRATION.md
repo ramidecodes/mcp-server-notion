@@ -8,23 +8,9 @@ This guide explains how to set up and use the Notion MCP Server with Cursor.
 
 ## Setup Instructions
 
-### 1. Install the Notion MCP Server
+### 1. Configure Your Notion API Key
 
-Install the server globally to make it easier for Cursor to find:
-
-```bash
-npm install -g mcp-server-notion
-```
-
-### 2. Configure Your Notion API Key
-
-Create a `.env` file in your home directory with your Notion API key:
-
-```
-NOTION_API_KEY=your_notion_api_key
-```
-
-To obtain a Notion API key:
+To use the Notion MCP Server with Cursor, you'll need a Notion API key:
 
 1. Go to [Notion Integrations](https://www.notion.so/my-integrations)
 2. Click "New integration"
@@ -33,7 +19,7 @@ To obtain a Notion API key:
 5. Click "Submit"
 6. Copy the "Internal Integration Token" (this is your API key)
 
-### 3. Share Notion Content with Your Integration
+### 2. Share Notion Content with Your Integration
 
 For your integration to access Notion content:
 
@@ -44,7 +30,7 @@ For your integration to access Notion content:
 
 Repeat this for all pages and databases you want to access.
 
-### 4. Configure Cursor
+### 3. Configure Cursor
 
 1. Open Cursor
 2. Go to Settings (gear icon in the bottom left)
@@ -52,9 +38,64 @@ Repeat this for all pages and databases you want to access.
 4. Click "Add Tool"
 5. Fill in the following details:
    - **Name**: Notion
-   - **Command**: mcp-server-notion
+   - **Command**: npx @ecovirtual/mcp-server-notion@latest -y --api-key=your_notion_api_key
    - **Arguments**: (leave empty)
 6. Click "Save"
+
+Alternatively, if you prefer to use an environment file:
+
+1. Create a `.env` file in your home directory with your Notion API key:
+   ```
+   NOTION_API_KEY=your_notion_api_key
+   ```
+   Note: When using an environment file, the variable name must be `NOTION_API_KEY` (not `--api-key`).
+2. Configure Cursor with:
+   - **Command**: npx @ecovirtual/mcp-server-notion@latest -y
+   - **Arguments**: (leave empty)
+
+### Troubleshooting "Failed to create client" Error
+
+If you encounter the "Failed to create client" error when adding the Notion MCP server to Cursor, try these solutions:
+
+1. **Use the full path to npx**:
+
+   - Find the full path to your npx executable: `which npx`
+   - Use the full path in the command: `/path/to/npx @ecovirtual/mcp-server-notion@latest -y --api-key=your_notion_api_key`
+
+2. **Use cmd.exe wrapper on Windows**:
+
+   - On Windows, try: `cmd /c npx @ecovirtual/mcp-server-notion@latest -y --api-key=your_notion_api_key`
+
+3. **Check Node.js version**:
+
+   - Ensure you have Node.js v16 or later installed
+   - Run `node -v` in your terminal to verify
+
+4. **Create a shell script wrapper**:
+
+   - Create a shell script (e.g., `notion-mcp.sh`) with the following content:
+     ```bash
+     #!/bin/bash
+     export NOTION_API_KEY=your_notion_api_key
+     npx @ecovirtual/mcp-server-notion@latest -y
+     ```
+     Note: In the shell script, use `NOTION_API_KEY` as the environment variable name.
+   - Make it executable: `chmod +x notion-mcp.sh`
+   - Use the script in Cursor: `/path/to/notion-mcp.sh`
+
+5. **Verify API key format**:
+
+   - Ensure your API key doesn't contain any special characters or spaces
+   - Make sure you're using the correct format: `--api-key=your_notion_api_key` (with the equals sign, no spaces)
+   - If you're having issues, try using the environment file approach instead
+
+6. **Restart Cursor**:
+
+   - Sometimes a simple restart of Cursor can resolve connection issues
+
+7. **Check for conflicting tools**:
+   - Remove any other MCP servers that might be conflicting
+   - Add them back one by one to identify any conflicts
 
 ## Using Notion in Cursor
 
@@ -149,13 +190,14 @@ For detailed rules and best practices when working with MCP servers in Cursor, p
 
 1. **"Tool not found" error**:
 
-   - Make sure the server is installed globally
-   - Check that the tool name in Cursor settings matches "mcp-server-notion"
+   - Make sure you're using the correct npx command: `npx @ecovirtual/mcp-server-notion@latest -y`
+   - Check that the tool name in Cursor settings matches exactly what's shown above
 
 2. **Authentication errors**:
 
    - Verify your Notion API key is correct
-   - Check that the `.env` file is in the right location
+   - If using the `--api-key` parameter, make sure it's properly formatted
+   - If using an environment file, check that the `.env` file is in the right location
 
 3. **Permission errors**:
 
@@ -169,7 +211,7 @@ For detailed rules and best practices when working with MCP servers in Cursor, p
 To debug issues, you can run the server manually and observe its output:
 
 ```bash
-mcp-server-notion
+npx @ecovirtual/mcp-server-notion@latest -y --verbose
 ```
 
 Then try making requests to see if there are any error messages.
@@ -181,7 +223,15 @@ Then try making requests to see if there are any error messages.
 You can specify a custom location for your `.env` file:
 
 ```bash
-mcp-server-notion --env-path /path/to/.env
+npx @ecovirtual/mcp-server-notion@latest -y --env-path /path/to/.env
+```
+
+### Direct API Key Usage
+
+You can provide the API key directly without using an environment file:
+
+```bash
+npx @ecovirtual/mcp-server-notion@latest -y --api-key=your_notion_api_key
 ```
 
 ### Logging
@@ -189,7 +239,7 @@ mcp-server-notion --env-path /path/to/.env
 To enable verbose logging:
 
 ```bash
-mcp-server-notion --verbose
+npx @ecovirtual/mcp-server-notion@latest -y --verbose
 ```
 
 ## Limitations

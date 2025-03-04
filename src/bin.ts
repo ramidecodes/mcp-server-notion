@@ -14,6 +14,8 @@ const versionArg = args.includes("--version") || args.includes("-v");
 const verboseArg = args.includes("--verbose");
 const envPathIndex = args.findIndex((arg) => arg === "--env-path");
 const envPath = envPathIndex !== -1 ? args[envPathIndex + 1] : null;
+const apiKeyIndex = args.findIndex((arg) => arg.startsWith("--api-key="));
+const apiKey = apiKeyIndex !== -1 ? args[apiKeyIndex].split("=")[1] : null;
 
 // Show help text
 if (helpArg) {
@@ -28,11 +30,13 @@ OPTIONS:
   -v, --version           Show version information
   --verbose               Enable verbose logging
   --env-path <path>       Path to .env file (default: ./.env or ~/.env)
+  --api-key=<key>         Notion API key (overrides environment variable)
 
 EXAMPLES:
   mcp-server-notion
   mcp-server-notion --verbose
   mcp-server-notion --env-path /path/to/.env
+  mcp-server-notion --api-key=your_notion_api_key
   `);
   process.exit(0);
 }
@@ -73,6 +77,11 @@ try {
       dotenv.config({ path: homeDirEnv });
     }
   }
+
+  // Set API key from command line if provided
+  if (apiKey) {
+    process.env.NOTION_API_KEY = apiKey;
+  }
 } catch (error) {
   console.error("Error loading environment variables:", error);
   process.exit(1);
@@ -100,7 +109,7 @@ async function main() {
       console.log("Starting Notion MCP Server...");
     }
 
-    const server = new NotionMCPServer();
+    const server = new NotionMCPServer(process.env.NOTION_API_KEY);
     await server.connect(new StdioServerTransport());
 
     if (verboseArg) {

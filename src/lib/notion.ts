@@ -21,11 +21,6 @@ import {
 // Load environment variables
 dotenv.config();
 
-// Initialize the Notion client
-const notion = new Client({
-  auth: process.env.NOTION_API_KEY,
-});
-
 /**
  * Error class for Notion API errors
  */
@@ -48,7 +43,15 @@ export class NotionService {
   private client: Client;
 
   constructor(apiKey?: string) {
-    this.client = apiKey ? new Client({ auth: apiKey }) : notion;
+    if (!apiKey && !process.env.NOTION_API_KEY) {
+      throw new Error(
+        "Notion API key is required. Provide it as a parameter or set the NOTION_API_KEY environment variable."
+      );
+    }
+
+    this.client = new Client({
+      auth: apiKey || process.env.NOTION_API_KEY,
+    });
   }
 
   /**

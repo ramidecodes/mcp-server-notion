@@ -18,11 +18,11 @@ This package provides a Model Context Protocol (MCP) server implementation that 
 ## Installation
 
 ```bash
-npm install mcp-server-notion
+npm install @ecovirtual/mcp-server-notion
 # or
-yarn add mcp-server-notion
+yarn add @ecovirtual/mcp-server-notion
 # or
-pnpm add mcp-server-notion
+pnpm add @ecovirtual/mcp-server-notion
 ```
 
 ## Quick Start
@@ -33,16 +33,28 @@ pnpm add mcp-server-notion
 2. Create a new integration
 3. Copy the API key
 
-### 2. Create a `.env` file
+### 2. Run the server
+
+You can run the server directly using npx without installing it globally:
+
+```bash
+npx @ecovirtual/mcp-server-notion@latest -y --api-key=your_notion_api_key
+```
+
+Alternatively, you can use an environment file:
+
+1. Create a `.env` file:
 
 ```
 NOTION_API_KEY=your_notion_api_key
 ```
 
-### 3. Run the server
+Note: When using environment variables, the name must be `NOTION_API_KEY` (not `--api-key`).
+
+2. Run the server:
 
 ```bash
-npx mcp-server-notion
+npx @ecovirtual/mcp-server-notion@latest -y
 ```
 
 ## Usage
@@ -53,18 +65,21 @@ npx mcp-server-notion
 Notion MCP Server - A Model Context Protocol server for Notion
 
 USAGE:
-  mcp-server-notion [OPTIONS]
+  npx @ecovirtual/mcp-server-notion@latest [OPTIONS]
 
 OPTIONS:
   -h, --help              Show this help message
   -v, --version           Show version information
   --verbose               Enable verbose logging
   --env-path <path>       Path to .env file (default: ./.env or ~/.env)
+  --api-key <key>         Notion API key (overrides environment variable)
+  -y                      Skip confirmation prompts
 
 EXAMPLES:
-  mcp-server-notion
-  mcp-server-notion --verbose
-  mcp-server-notion --env-path /path/to/.env
+  npx @ecovirtual/mcp-server-notion@latest -y
+  npx @ecovirtual/mcp-server-notion@latest -y --verbose
+  npx @ecovirtual/mcp-server-notion@latest -y --env-path /path/to/.env
+  npx @ecovirtual/mcp-server-notion@latest -y --api-key=your_notion_api_key
 ```
 
 ### Programmatic Usage
@@ -126,7 +141,32 @@ For detailed documentation on each tool, including parameters and examples, see 
 
 ## Integration with Cursor
 
-This MCP server is designed to work seamlessly with [Cursor](https://cursor.sh/), an AI-powered code editor. To use this server with Cursor, follow the instructions in the [Cursor Rules Documentation](docs/CURSOR_RULES.md).
+This MCP server is designed to work seamlessly with [Cursor](https://cursor.sh/), an AI-powered code editor. To use this server with Cursor, follow the instructions in the [Cursor Integration Guide](docs/CURSOR_INTEGRATION.md).
+
+### Best Practices for Cursor Integration
+
+1. **Use the latest version**: Always use the `@latest` tag with npx to ensure you're using the most recent version of the server.
+
+2. **Include the -y flag**: The `-y` flag skips confirmation prompts, which is necessary for Cursor integration.
+
+3. **API key handling**:
+
+   - For security, prefer using the `--api-key` parameter or environment variables
+   - When using the `--api-key` parameter, use the format `--api-key=your_notion_api_key` (with equals sign, no spaces)
+   - When using environment variables, use `NOTION_API_KEY` as the variable name
+   - Avoid hardcoding API keys in scripts or configuration files
+
+4. **Troubleshooting "Failed to create client" errors**:
+
+   - On Windows, use `cmd /c` before the npx command
+   - On macOS/Linux, consider using the full path to npx
+   - Create a shell script wrapper if direct commands fail
+
+5. **Testing outside Cursor first**:
+   - Always test your MCP server command in a terminal before adding it to Cursor
+   - Verify it works correctly and returns the expected output
+
+For detailed troubleshooting steps, see the [Cursor Integration Guide](docs/CURSOR_INTEGRATION.md).
 
 ## Project Structure
 
@@ -144,7 +184,7 @@ mcp-server-notion/
 │       └── notion.ts         # Type definitions
 ├── docs/
 │   ├── TOOLS.md              # Tool documentation
-│   ├── CURSOR_RULES.md       # Cursor integration guide
+│   ├── CURSOR_INTEGRATION.md # Cursor integration guide
 │   └── STRUCTURE.md          # Project structure documentation
 └── .env.example              # Example environment variables
 ```
