@@ -23,16 +23,8 @@ export type SearchQuery = z.infer<typeof SearchQuerySchema>;
 // Database query parameters
 export const DatabaseQuerySchema = z.object({
   database_id: z.string(),
-  filter: z.record(z.any()).optional(),
-  sorts: z
-    .array(
-      z.object({
-        property: z.string().optional(),
-        timestamp: z.enum(["created_time", "last_edited_time"]).optional(),
-        direction: z.enum(["ascending", "descending"]),
-      })
-    )
-    .optional(),
+  filter: z.any().optional(),
+  sorts: z.any().optional(),
   page_size: z.number().min(1).max(100).optional(),
   start_cursor: z.string().optional(),
 });

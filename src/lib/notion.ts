@@ -95,24 +95,7 @@ export class NotionService {
       }
 
       if (params.sorts) {
-        queryParams.sorts = params.sorts.map((sort) => {
-          if (sort.property) {
-            return {
-              property: sort.property,
-              direction: sort.direction,
-            };
-          } else if (sort.timestamp) {
-            return {
-              timestamp: sort.timestamp,
-              direction: sort.direction,
-            };
-          }
-          // Default to a property sort if neither is specified
-          return {
-            property: "title",
-            direction: sort.direction,
-          };
-        });
+        queryParams.sorts = params.sorts as any;
       }
 
       return await this.client.databases.query(queryParams);

@@ -48,6 +48,9 @@ export class NotionMCPServer {
 
     // Link Preview operations
     this.registerLinkPreviewTools();
+
+    // Helper functions
+    this.registerHelperFunctions();
   }
 
   /**
@@ -131,8 +134,27 @@ export class NotionMCPServer {
       },
       async ({ database_id, filter, sorts, page_size, start_cursor }) => {
         const params: any = { database_id, page_size, start_cursor };
-        if (filter) params.filter = JSON.parse(filter);
-        if (sorts) params.sorts = JSON.parse(sorts);
+
+        // Parse filter and sorts from JSON strings to objects
+        // Example filter: "{\"property\":\"Status\",\"select\":{\"equals\":\"Done\"}}"
+        // Example sorts: "[{\"property\":\"Priority\",\"direction\":\"descending\"}]"
+        try {
+          if (filter) params.filter = JSON.parse(filter);
+          if (sorts) params.sorts = JSON.parse(sorts);
+        } catch (parseError) {
+          console.error("Error parsing JSON parameters:", parseError);
+          return {
+            content: [
+              {
+                type: "text",
+                text: `Error: Failed to parse JSON parameters - ${
+                  (parseError as Error).message
+                }. Make sure filter and sorts are valid JSON strings.`,
+              },
+            ],
+            isError: true,
+          };
+        }
 
         try {
           const results = await this.notionService.queryDatabase(params);
@@ -806,9 +828,56 @@ export class NotionMCPServer {
   }
 
   /**
+   * Helper functions for tool usage
+   */
+  private registerHelperFunctions(): void {
+    // Add helper functions here if needed
+  }
+
+  /**
    * Connect the server to a transport
    */
   async connect(transport: any): Promise<void> {
     await this.server.connect(transport);
   }
+}
+
+/**
+ * Helper functions for working with the Notion MCP Server
+ */
+
+/**
+ * Helper function to create a properly formatted filter string for the query-database tool
+ * @param filter The filter object
+ * @returns A JSON string representation of the filter
+ *
+ * @example
+ * const filter = createFilterString({
+ *   property: "Status",
+ *   select: {
+ *     equals: "Done"
+ *   }
+ * });
+ * // Returns: "{\"property\":\"Status\",\"select\":{\"equals\":\"Done\"}}"
+ */
+export function createFilterString(filter: any): string {
+  return JSON.stringify(filter);
+}
+
+/**
+ * Helper function to create a properly formatted sorts string for the query-database tool
+ * @param sorts The sorts array
+ * @returns A JSON string representation of the sorts array
+ *
+ * @example
+ * const sorts = createSortsString([
+ *   {
+ *     property: "Priority",
+ *     direction: "descending"
+ *   }
+ * ]);
+ * // Returns: "[{\"property\":\"Priority\",\"direction\":\"descending\"}]"
+ */
+export function createSortsString(sorts: any[]): string {
+  return JSON.stringify(sorts);
 }

@@ -66,8 +66,8 @@ Query a database to retrieve entries.
 **Parameters:**
 
 - `database_id`: The ID of the database to query
-- `filter` (optional): Filter conditions for the query
-- `sorts` (optional): Sort conditions for the query
+- `filter` (optional): JSON string of filter conditions for the query
+- `sorts` (optional): JSON string of sort conditions for the query
 - `page_size` (optional): Number of results to return (max 100)
 - `start_cursor` (optional): Pagination cursor
 
@@ -76,18 +76,8 @@ Query a database to retrieve entries.
 ```json
 {
   "database_id": "database_id",
-  "filter": {
-    "property": "Status",
-    "select": {
-      "equals": "Done"
-    }
-  },
-  "sorts": [
-    {
-      "property": "Priority",
-      "direction": "descending"
-    }
-  ],
+  "filter": "{\"property\":\"Status\",\"select\":{\"equals\":\"Done\"}}",
+  "sorts": "[{\"property\":\"Priority\",\"direction\":\"descending\"}]",
   "page_size": 10
 }
 ```
@@ -112,6 +102,33 @@ Query a database to retrieve entries.
   "next_cursor": null,
   "has_more": false
 }
+```
+
+**Helper Functions:**
+
+To make it easier to work with the `query-database` tool, the package provides helper functions for creating properly formatted JSON strings:
+
+```typescript
+import {
+  createFilterString,
+  createSortsString,
+} from "@ecovirtual/mcp-server-notion";
+
+// Create a filter string
+const filter = createFilterString({
+  property: "Status",
+  select: {
+    equals: "Done",
+  },
+});
+
+// Create a sorts string
+const sorts = createSortsString([
+  {
+    property: "Priority",
+    direction: "descending",
+  },
+]);
 ```
 
 ### `get-database`

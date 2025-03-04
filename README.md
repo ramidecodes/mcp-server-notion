@@ -108,6 +108,41 @@ The server provides the following tools for interacting with Notion:
 - `query-database`: Query a database to retrieve entries
 - `get-database`: Retrieve a database by ID
 
+#### Helper Functions for Database Tools
+
+The package provides helper functions to make it easier to work with the `query-database` tool:
+
+```typescript
+import {
+  createFilterString,
+  createSortsString,
+} from "@ecovirtual/mcp-server-notion";
+
+// Create a filter string for the query-database tool
+const filter = createFilterString({
+  property: "Status",
+  select: {
+    equals: "Done",
+  },
+});
+
+// Create a sorts string for the query-database tool
+const sorts = createSortsString([
+  {
+    property: "Priority",
+    direction: "descending",
+  },
+]);
+
+// Use them in your query
+const result = await queryDatabase({
+  database_id: "your_database_id",
+  filter,
+  sorts,
+  page_size: 10,
+});
+```
+
 ### Page Tools
 
 - `create-page`: Create a new page in a database or as a child of another page
