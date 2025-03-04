@@ -1,5 +1,5 @@
 {
-  "name": "@ecovirtual/mcp-server-notion",
+  "name": "@ramidecodes/mcp-server-notion",
   "version": "1.0.2",
   "description": "A Model Context Protocol (MCP) server that exposes the official Notion SDK",
   "type": "module",
@@ -39,11 +39,11 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ecovirtual/mcp-server-notion.git"
+    "url": "https://github.com/ramidecodes/mcp-server-notion.git"
   },
-  "homepage": "https://github.com/ecovirtual/mcp-server-notion#readme",
+  "homepage": "https://github.com/ramidecodes/mcp-server-notion#readme",
   "bugs": {
-    "url": "https://github.com/ecovirtual/mcp-server-notion/issues"
+    "url": "https://github.com/ramidecodes/mcp-server-notion/issues"
   },
   "engines": {
     "node": ">=18"
