@@ -1,6 +1,6 @@
 {
   "name": "@ecovirtual/mcp-server-notion",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A Model Context Protocol (MCP) server that exposes the official Notion SDK",
   "type": "module",
   "main": "dist/index.js",
