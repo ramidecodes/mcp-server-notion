@@ -2,6 +2,10 @@
 
 A Model Context Protocol (MCP) server that exposes the official Notion SDK, allowing AI models to interact with Notion workspaces.
 
+<a href="https://glama.ai/mcp/servers/bjc5iac7gt">
+  <img width="380" height="200" src="https://glama.ai/mcp/servers/bjc5iac7gt/badge" alt="Notion Server MCP server" />
+</a>
+
 ## Quick Start
 
 ### 1. Set up your Notion integration
