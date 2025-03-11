@@ -14,31 +14,40 @@ A Model Context Protocol (MCP) server that exposes the official Notion SDK, allo
 2. Create a new integration
 3. Copy the API key
 
-### 2. Add to Claude Desktop or Cursor AI
+### 2. Add to your AI assistant
 
-Add the following command to your AI assistant's MCP server configuration:
+You can add this MCP server to Claude Desktop, Cursor AI, or Claude.ai using either of these configuration formats:
+
+#### Command Line Format
 
 ```bash
 npx @ramidecodes/mcp-server-notion@latest -y --api-key=your-notion-integration-key
 ```
 
+#### JSON Configuration Format
+
+```json
+{
+  "name": "Notion",
+  "command": {
+    "args": [
+      "@ramidecodes/mcp-server-notion@latest",
+      "-y",
+      "--api-key=your-notion-integration-key"
+    ],
+    "env": {},
+    "executable": "npx"
+  }
+}
+```
+
 Replace `your-notion-integration-key` with the API key from step 1.
 
-## Integration Guide
+### Setup Instructions
 
-### For Claude Desktop
-
-1. Open Claude Desktop
-2. Go to Settings > Advanced > Model Context Protocol
-3. Add a new MCP server with the command above
-4. Save and restart Claude
-
-### For Cursor AI
-
-1. Open Cursor AI
-2. Go to Settings > AI > MCP Servers
-3. Add a new MCP server with the command above
-4. Save settings
+- **Claude Desktop**: Settings > Advanced > Model Context Protocol
+- **Cursor AI**: Settings > AI > MCP Servers
+- **Claude.ai (Web)**: Profile > Settings > API & Integrations > Model Context Protocol
 
 ## Available Tools
 
@@ -68,6 +77,23 @@ NOTION_API_KEY=your-notion-integration-key
 
 ```bash
 npx @ramidecodes/mcp-server-notion@latest -y
+```
+
+#### JSON Configuration with Environment Variables (for Claude Desktop)
+
+You can also use environment variables in the JSON configuration format:
+
+```json
+{
+  "name": "Notion",
+  "command": {
+    "args": ["@ramidecodes/mcp-server-notion@latest", "-y"],
+    "env": {
+      "NOTION_API_KEY": "your-notion-integration-key"
+    },
+    "executable": "npx"
+  }
+}
 ```
 
 ### Command Line Options
