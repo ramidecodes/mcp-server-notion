@@ -14,7 +14,19 @@ A Model Context Protocol (MCP) server that exposes the official Notion SDK, allo
 2. Create a new integration
 3. Copy the API key
 
-### 2. Add to your AI assistant
+### 2. Connect your Notion pages to the integration
+
+For your integration to access Notion content, you need to explicitly share your pages or databases with it:
+
+1. Navigate to the Notion page or database you want to access through the integration
+2. Click the "Share" button in the top-right corner
+3. In the "Add people, groups, or integrations" field, select your integration from the dropdown list
+4. Click "Invite"
+5. Repeat for each page or database you want to make accessible
+
+**Note:** An integration only has access to pages and databases that have been explicitly shared with it. Parent pages do not automatically grant access to child pages.
+
+### 3. Add to your AI assistant
 
 You can add this MCP server to Claude Desktop, Cursor AI, or Claude.ai using either of these configuration formats:
 
@@ -115,6 +127,12 @@ If you encounter "Failed to create client" errors:
 - On Windows, try using `cmd /c` before the npx command
 - On macOS/Linux, try using the full path to npx
 - Test the command in a terminal before adding it to your AI assistant
+
+### Common Issues
+
+- **"No access to resource" errors**: Make sure you've shared the specific Notion page or database with your integration (see step 2)
+- **Integration not appearing in share menu**: Try refreshing the page or restarting your browser
+- **Limited capabilities**: Check that your integration has the appropriate capabilities enabled in the Notion integration settings
 
 ## Features
 
