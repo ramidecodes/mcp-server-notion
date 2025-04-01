@@ -24,7 +24,7 @@ For your integration to access Notion content, you need to explicitly share your
 4. Click "Invite"
 5. Repeat for each page or database you want to make accessible
 
-**Note:** An integration only has access to pages and databases that have been explicitly shared with it. Parent pages do not automatically grant access to child pages.
+**Note:** An integration only has access to pages and databases that have been explicitly shared with it. Child pages automatically inherit access from parent pages.
 
 ### 3. Add to your AI assistant
 
@@ -40,15 +40,15 @@ npx @ramidecodes/mcp-server-notion@latest -y --api-key=your-notion-integration-k
 
 ```json
 {
-  "name": "Notion",
-  "command": {
-    "args": [
-      "@ramidecodes/mcp-server-notion@latest",
-      "-y",
-      "--api-key=your-notion-integration-key"
-    ],
-    "env": {},
-    "executable": "npx"
+  "mcpServers": {
+    "Notion": {
+      "command": "npx",
+      "args": [
+        "@ramidecodes/mcp-server-notion@latest",
+        "-y",
+        "--api-key=your-notion-integration-key"
+      ]
+    }
   }
 }
 ```
@@ -97,13 +97,15 @@ You can also use environment variables in the JSON configuration format:
 
 ```json
 {
-  "name": "Notion",
-  "command": {
-    "args": ["@ramidecodes/mcp-server-notion@latest", "-y"],
-    "env": {
-      "NOTION_API_KEY": "your-notion-integration-key"
-    },
-    "executable": "npx"
+  "mcpServers": {
+    "Notion": {
+      "command": "npx",
+      "args": [
+        "@ramidecodes/mcp-server-notion@latest",
+        "-y",
+        "--api-key=your-notion-integration-key"
+      ]
+    }
   }
 }
 ```
